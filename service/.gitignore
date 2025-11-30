@@ -1,0 +1,99 @@
+# -----------------------------
+# Go Build
+# -----------------------------
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Output of `go build`
+bin/
+build/
+dist/
+
+# Temporary files
+*.out
+
+# -----------------------------
+# Go Modules
+# -----------------------------
+# go mod vendor
+vendor/
+
+# -----------------------------
+# IDE / Editor
+# -----------------------------
+# VSCode
+.vscode/
+.history/
+
+# JetBrains (GoLand)
+.idea/
+
+# vim / emacs
+*.swp
+*.swo
+*~
+
+# -----------------------------
+# OS files
+# -----------------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------------
+# Logs
+# -----------------------------
+*.log
+logs/
+log/
+
+# -----------------------------
+# Environment / Config
+# -----------------------------
+.env
+.env.local
+.env.*.local
+config.yaml
+config.yml
+
+# -----------------------------
+# Cache
+# -----------------------------
+# Go build cache
+/go/pkg/mod/
+/go/bin/
+
+# Go test cache
+*.cache
+
+# temp files
+tmp/
+temp/
+
+# -----------------------------
+# Docker
+# -----------------------------
+# Docker Compose override files
+docker-compose.override.yml
+
+# Docker build artifacts
+.docker/
+
+# -----------------------------
+# Coverage
+# -----------------------------
+coverage.out
+cover.out
+coverage/
+
+# -----------------------------
+# Node / Frontend (if exists)
+# -----------------------------
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
