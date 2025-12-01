@@ -5,6 +5,7 @@
     <div class="header">
       <h2 class="title">📌 留言板</h2>
 
+      <!-- 用户信息 -->
       <div v-if="user" class="user-info">
         <div class="user-text">
           <div class="nickname">{{ user.nickname }}</div>
@@ -21,6 +22,7 @@
         </van-button>
       </div>
 
+      <!-- 登录按钮 -->
       <div v-else>
         <van-button size="small" type="primary" @click="goLogin">
           登录
@@ -90,7 +92,7 @@
         :key="msg.id"
       >
         <div class="msg-header">
-          <div class="nickname">{{ msg.user_nickname }}</div>
+          <div class="nickname">{{ msg.nickname }}</div>
           <span class="status" :class="msg.status">
             {{ statusText(msg) }}
           </span>
@@ -147,6 +149,7 @@ import { showToast } from "vant"
 import { getMe } from "@/api/auth"
 import {
   getMessages,
+  getAllMessages,
   postMessage,
   deleteMessage,
   approveMessage,
@@ -179,17 +182,39 @@ const loadUser = async () => {
 
 // -------------------- 留言 --------------------
 const loadMessages = async () => {
-  const res = await getMessages()
-  const list = res.messages || []
+  let list: any[] = []
+
+  if (user.value?.role === "admin") {
+    const resAdmin = await getAllMessages()
+    const rawList = resAdmin.messages || []
+
+    // 映射字段统一成前端期望
+    list = rawList.map((m: any) => ({
+      id: m.ID,
+      user_id: m.UserID,
+      nickname: m.User?.Nickname || "未知",
+      content: m.Content,
+      status: m.Status,
+      created_at: m.CreatedAt,
+      updated_at: m.UpdatedAt
+    }))
+  } else {
+    const resUser = await getMessages()
+    list = resUser.messages || []
+  }
 
   if (!user.value) {
     messages.value = list.filter((m: any) => m.status === "approved")
-  } else {
+  } else if (user.value.role !== "admin") {
     messages.value = list.filter(
       (m: any) => m.status === "approved" || m.user_id === user.value.id
     )
+  } else {
+    // admin 全部显示
+    messages.value = list
   }
 }
+
 
 const statusText = (msg: any) => {
   const map: any = {
@@ -242,9 +267,10 @@ const reject = async (id: number) => {
 // -------------------- 登录/退出 --------------------
 const goLogin = () => router.push("/login")
 
-const logout = () => {
+const logout = async () => {
   localStorage.removeItem("token")
   user.value = null
+  await loadMessages()
   showToast("已退出")
 }
 

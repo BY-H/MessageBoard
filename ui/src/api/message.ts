@@ -18,6 +18,12 @@ export const getMessages = () => {
   return request.get<{ messages: Message[] }>('/messages')
 }
 
+
+/**
+ * 管理员获取所有消息
+ */
+export const getAllMessages = () => request.get<{ messages: Message[] }>("/messages/all")
+
 /**
  * 提交留言
  * @param content 留言内容
@@ -39,7 +45,7 @@ export const deleteMessage = (id: number) => {
  * @param id 留言 ID
  */
 export const approveMessage = (id: number) => {
-  return request.post(`/messages/${id}/approve`)
+  return request.patch(`/messages/${id}/approve`)
 }
 
 /**
@@ -47,5 +53,5 @@ export const approveMessage = (id: number) => {
  * @param id 留言 ID
  */
 export const rejectMessage = (id: number) => {
-  return request.post(`/messages/${id}/reject`)
+  return request.patch(`/messages/${id}/reject`)
 }
