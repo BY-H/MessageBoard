@@ -1,30 +1,60 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div id="app">
+    <!-- 全局加载遮罩（可选） -->
+    <van-loading
+      v-if="loading"
+      size="24px"
+      type="spinner"
+      class="global-loading"
+    />
+
+    <!-- 真正的页面内容 -->
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<script setup lang="ts">
+import { ref } from 'vue'
+import 'vant/lib/index.css'
+
+/**
+ * 全局 loading，用于以后:
+ * - 登录状态检查
+ * - 刷新 token
+ * - 全局加载请求
+ */
+const loading = ref(false)
+</script>
+
+<style>
+/* 页面淡入淡出 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .25s ease;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+/* 全局加载图标 */
+.global-loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+/* 全局样式：适配移动端 */
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: #f7f8fa;
 }
 </style>

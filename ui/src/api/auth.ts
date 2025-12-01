@@ -1,13 +1,23 @@
 import request from './request'
 
-export const login = (data: any) => {
-  return request.post('/auth/login', data)
+export interface LoginResp {
+  token: string;
+  user: {
+    id: number;
+    nickname: string;
+    username: string;
+    role: string;
+  };
 }
 
-export const register = (data: any) => {
-  return request.post('/auth/register', data)
+export function login(data: { username: string; password: string }) {
+  return request.post<LoginResp>('/auth/login', data);
 }
 
-export const getMe = () => {
-  return request.get('/auth/me')
+export function register(data: any) {
+  return request.post('/auth/register', data);
+}
+
+export function getMe() {
+  return request.get('/auth/me');
 }

@@ -8,7 +8,6 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'Home',
     component: Home,
-    meta: { auth: true }
   },
   {
     path: '/login',
@@ -25,16 +24,6 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes
-})
-
-// 登录权限拦截
-router.beforeEach((to, _from, next) => {
-  const token = localStorage.getItem('token')
-
-  if (to.meta.auth && !token) {
-    return next('/login')
-  }
-  next()
 })
 
 export default router
